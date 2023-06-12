@@ -127,9 +127,56 @@ with colc2:
 cold11, cold21 = st.columns(2)
 
 with cold11:
-    pass
+    "### ⠀"
+    diterima = df_eda_01[(df_eda_01["hasil.akhir_x"]==1)].count()
+    ditolak = df_eda_01[(df_eda_01["hasil.akhir_x"]==0)].count() 
+    keketatan = df_eda_01[(df_eda_01["hasil.akhir_x"]==1)].count()/df_eda_01[(df_eda_01["hasil.akhir_x"]==0)].count()*100
+
+    diterima_lk = df_eda_01[(df_eda_01["hasil.akhir_x"]==1)&(df_eda_01['jk']=="Lk")].count()
+    diterima_pr = df_eda_01[(df_eda_01["hasil.akhir_x"]==1)&(df_eda_01['jk']=="Pr")].count()
+    
+    cold110, cold111 = st.columns(2)
+
+    with cold110:
+        st.metric(label="Tidak Diterima",
+        value=f"{ditolak[0]}"
+        )
+
+        st.metric(label="Keketatan Nasional",
+        value=f"{numerize.numerize(keketatan['hasil.akhir_x'])}%"
+        )
+
+    with cold111:
+        st.metric(label="Diterima",
+        value=f"{diterima[0]}"
+        )
+
+        st.metric(label="Diterima Lk",
+        value=f"{diterima_lk[0]}"
+        )
+
+        st.metric(label="Diterima Pr",
+        value=f"{diterima_pr[0]}"
+        )
+    
+    "Latar Belakang Pendidikan Peserta yang Lulus"
+    st.dataframe(df_eda[df_eda['hasil.akhir_x']=='Lulus']['nama.pendidikan'].value_counts().reset_index().rename(columns={"index":"jenjang pendidikan", "nama.pendidikan":"jumlah lulus"}).set_index("jenjang pendidikan"))
+
+
 
 with cold21:
+    "### Distribusi Nilai SKD Nasional"
+    fig = plt.figure(figsize=(6, 5))
+    ax = sns.kdeplot(df_eda_01, x='skd.nilai', hue="hasil.akhir_x")
+    ax.set(xlabel='Nilai SKD', ylabel='Kepadatan')
+    st.pyplot(fig)
+
+    "Peserta yang lulus cenderung memiliki nilai SKD yang lebih tinggi dibandingkan dengan yang tidak lolos. Hal ini terlihat dari puncak orange berada di sebelah kanan dari distribusi grafik biru."
+
+
+cold12, cold22 = st.columns(2)
+
+with cold12:
     "### Korelasi Secara Nasional"
     fig = plt.figure(figsize=(6, 5))
     ax = sns.heatmap(korelasi, annot=True, fmt=".2f");
@@ -137,13 +184,14 @@ with cold21:
 
     "Plot korelasi terhadap atribut SKD, Matematika, dan Hasil Akhir menunjukkan bahwa SKD memiliki korelasi yang lemah dengan atribut Hasil Seleksi. Di sisi lain, ditemukan bahwa tes Matematika memiliki korelasi yang sedang dengan Hasil Seleksi."
 
-cold12, cold22 = st.columns(2)
-
-with cold12:
-    pass
-
 with cold22:
-    pass
+    "### Distribusi Nilai MTK Nasional"
+    fig = plt.figure(figsize=(6,5))
+    ax = sns.kdeplot(df_eda_01, x='mtk.nilai', hue="hasil.akhir_x")
+    ax.set(xlabel='Nilai Matematika', ylabel='Kepadatan')
+    st.pyplot(fig)
+
+    "Peserta yang lulus memiliki nilai tes Matematika yang lebih besar dibandingkan dengan yang tidak lolos. Hal ini terlihat dari puncak orange berada di sebelah kanan dari distribusi grafik biru. Perbedaan nilai yang paling sering muncul ini bahkan menyentuh angka 50 poin."
 
 "---"
 
