@@ -36,13 +36,31 @@ pg_mtk = df_eda_01[df_eda_01['hasil.akhir_x']==1].groupby('lokasi.formasi').agg(
     nilai_rerata_mtk = ('mtk.nilai','mean')
 )
 
+num_col = ['skd.nilai', 'mtk.nilai', 'hasil.akhir_x']
+korelasi = df_eda_01[num_col].corr()
+
 # START HERE
 with st.sidebar:
     # Menambahkan logo perusahaan
     # st.image("https://stis.ac.id/media/source/up.png", width=150)
     st.markdown('<img style="text-align:center;max-width:100%;padding-bottom:32px" src="https://stis.ac.id/media/source/up.png">', unsafe_allow_html=True)
     st.markdown('<div style="text-align:center">Wahyu Dwi Prasetio</div>', unsafe_allow_html=True)
-    st.markdown('<div style="text-align:center">wdprsto@gmail.com</div>', unsafe_allow_html=True)
+    st.markdown('<div style="text-align:center;padding-bottom:32px">wdprsto@gmail.com</div>', unsafe_allow_html=True)
+
+    pilihan_lokasi = st.selectbox(
+        "Pilih Lokasi Anda",
+        ['Aceh', 'Sumatera Utara', 'Sumatera Barat', 'Riau', 'Jambi',
+        'Sumatera Selatan', 'Bengkulu', 'Lampung',
+        'Kepulauan Bangka Belitung', 'Kepulauan Riau',
+        'Nusa Tenggara Timur', 'Nusa Tenggara Barat', 'Kalimantan Barat',
+        'Kalimantan Tengah', 'Kalimantan Selatan', 'Kalimantan Timur',
+        'Kalimantan Utara', 'Sulawesi Utara', 'Sulawesi Tengah',
+        'Sulawesi Selatan', 'Sulawesi Tenggara', 'Gorontalo',
+        'Sulawesi Barat', 'Maluku', 'Maluku Utara', 'Papua Barat', 'Papua',
+        'D I Yogyakarta', 'Banten', 'Bali', 'Papua Barat (Afirmasi)',
+        'Papua (Afirmasi)', 'Pusat', 'DKI Jakarta', 'Jawa Barat',
+        'Jawa Tengah', 'Jawa Timur']
+    )
     
 
 
@@ -77,12 +95,12 @@ with cola2:
 
 "- Passing grade SKD dan Matematika yang tinggi agar dapat lolos ke tahap selanjutnya "
 
-colc1, colc2 = st.columns(2)
+colb1, colb2 = st.columns(2)
 
-with colc1:
+with colb1:
     st.dataframe(pg_skd)
 
-with colc2:
+with colb2:
     st.dataframe(pg_mtk)
 
 "- Adanya kuota formasi per Provinsi yang diatur oleh BPS"
@@ -106,10 +124,34 @@ with colc2:
 
 "## Infografis"
 
+cold1, cold2 = st.columns(2)
+
+with cold1:
+    pass
+
+with cold2:
+    pass
 
 "---"
 
 "## Analisis Korelasi"
+
+"Plot korelasi terhadap variabel SKD, Matematika, dan Hasil Akhir menunjukkan bahwa SKD memiliki korelas yang lemah dengan hasil seleksi penerimaan. Di sisi lain, diketahui bahwa nilai Matematika memiliki korelasi yang sedang dengan hasil seleksi penerimaan."
+
+cole1, cole2 = st.columns(2)
+
+with cole1:
+    "### Korelasi di "+pilihan_lokasi
+    korelasi_prov = df_eda_01[df_eda_01['lokasi.formasi']==pilihan_lokasi][num_col].corr()
+    fig = plt.figure(figsize=(6, 5))
+    ax = sns.heatmap(korelasi_prov, annot=True, fmt=".2f");
+    st.pyplot(fig)
+
+with cole2:
+    "### Korelasi Secara Nasional"
+    fig = plt.figure(figsize=(6, 5))
+    ax = sns.heatmap(korelasi, annot=True, fmt=".2f");
+    st.pyplot(fig)
 
 "---"
 
