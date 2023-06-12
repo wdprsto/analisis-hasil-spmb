@@ -29,12 +29,12 @@ pg_skd = df_eda_01[df_eda_01['hasil.akhir_x']==1].groupby('lokasi.formasi').agg(
     nilai_min_skd = ('skd.nilai','min'),
     nilai_max_skd = ('skd.nilai','max'),
     nilai_rerata_skd = ('skd.nilai','mean')
-)
+).reset_index()
 pg_mtk = df_eda_01[df_eda_01['hasil.akhir_x']==1].groupby('lokasi.formasi').agg(
     nilai_min_mtk = ('mtk.nilai','min'),
     nilai_max_mtk = ('mtk.nilai','max'),
     nilai_rerata_mtk = ('mtk.nilai','mean')
-)
+).reset_index()
 
 num_col = ['skd.nilai', 'mtk.nilai', 'hasil.akhir_x']
 korelasi = df_eda_01[num_col].corr()
@@ -98,10 +98,10 @@ with cola2:
 colb1, colb2 = st.columns(2)
 
 with colb1:
-    st.dataframe(pg_skd)
+    st.dataframe(pg_skd.set_index('lokasi.formasi'))
 
 with colb2:
-    st.dataframe(pg_mtk)
+    st.dataframe(pg_mtk.set_index('lokasi.formasi'))
 
 "- Adanya kuota formasi per Provinsi yang diatur oleh BPS"
 
@@ -122,41 +122,73 @@ with colc2:
 
 "---"
 
-"## Infografis"
+"## Infografis SPMB STIS di Indonesia"
 
-cold1, cold2 = st.columns(2)
+cold11, cold21 = st.columns(2)
 
-with cold1:
+with cold11:
     pass
 
-with cold2:
-    pass
-
-"---"
-
-"## Analisis Korelasi"
-
-"Plot korelasi terhadap variabel SKD, Matematika, dan Hasil Akhir menunjukkan bahwa SKD memiliki korelas yang lemah dengan hasil seleksi penerimaan. Di sisi lain, diketahui bahwa nilai Matematika memiliki korelasi yang sedang dengan hasil seleksi penerimaan."
-
-cole1, cole2 = st.columns(2)
-
-with cole1:
-    "### Korelasi di "+pilihan_lokasi
-    korelasi_prov = df_eda_01[df_eda_01['lokasi.formasi']==pilihan_lokasi][num_col].corr()
-    fig = plt.figure(figsize=(6, 5))
-    ax = sns.heatmap(korelasi_prov, annot=True, fmt=".2f");
-    st.pyplot(fig)
-
-with cole2:
+with cold21:
     "### Korelasi Secara Nasional"
     fig = plt.figure(figsize=(6, 5))
     ax = sns.heatmap(korelasi, annot=True, fmt=".2f");
     st.pyplot(fig)
 
-kor_sha = korelasi_prov['hasil.akhir_x']['skd.nilai']
-kor_mha = korelasi_prov['hasil.akhir_x']['mtk.nilai']
-f"- Korelasi antara variabel SKD dan Hasil Akhir di {pilihan_lokasi} bernilai {round(kor_sha,3)} yang berarti bahwa kedua variabel tersebut berkorelasi **{'rendah' if kor_sha < 0.3 else 'sedang' if kor_sha < 0.7 else 'tinggi' }**"
-f"- Korelasi antara variabel Matematika dan Hasil Akhir di {pilihan_lokasi} bernilai {round(kor_mha,3)} yang berarti bahwa kedua variabel tersebut berkorelasi **{'rendah' if kor_mha < 0.3 else 'sedang' if kor_mha < 0.7 else 'tinggi' }**"
+    "Plot korelasi terhadap atribut SKD, Matematika, dan Hasil Akhir menunjukkan bahwa SKD memiliki korelasi yang lemah dengan atribut Hasil Seleksi. Di sisi lain, ditemukan bahwa tes Matematika memiliki korelasi yang sedang dengan Hasil Seleksi."
+
+cold12, cold22 = st.columns(2)
+
+with cold12:
+    pass
+
+with cold22:
+    pass
+
+"---"
+
+f"## Analisis di {pilihan_lokasi}"
+
+"Plot korelasi terhadap variabel SKD, Matematika, dan Hasil Akhir menunjukkan bahwa SKD memiliki korelas yang lemah dengan hasil seleksi penerimaan. Di sisi lain, diketahui bahwa nilai Matematika memiliki korelasi yang sedang dengan hasil seleksi penerimaan."
+
+cole11, cole21 = st.columns(2)
+
+with cole11:
+    "### Distribusi Nilai SKD"
+    skd_prov = df_eda_01[df_eda_01['lokasi.formasi']==pilihan_lokasi]
+    fig = plt.figure(figsize=(6, 5))
+    ax = sns.kdeplot(skd_prov, x='skd.nilai', hue="hasil.akhir_x")
+    ax.set(xlabel='Nilai SKD', ylabel='Kepadatan')
+    st.pyplot(fig)
+
+    st.dataframe(pg_skd[pg_skd['lokasi.formasi']==pilihan_lokasi].set_index('lokasi.formasi'))
+
+with cole21:
+    "### Distribusi Nilai MTK"
+    mtk_prov = df_eda_01[df_eda_01['lokasi.formasi']==pilihan_lokasi]
+    fig = plt.figure(figsize=(6, 5))
+    ax = sns.kdeplot(mtk_prov, x='mtk.nilai', hue="hasil.akhir_x")
+    ax.set(xlabel='Nilai Matematika', ylabel='Kepadatan')
+    st.pyplot(fig)
+
+    st.dataframe(pg_mtk[pg_mtk['lokasi.formasi']==pilihan_lokasi].set_index('lokasi.formasi'))
+
+
+cole12, cole22 = st.columns(2)
+
+with cole12:
+    "### Korelasi"
+    korelasi_prov = df_eda_01[df_eda_01['lokasi.formasi']==pilihan_lokasi][num_col].corr()
+    fig = plt.figure(figsize=(6, 5))
+    ax = sns.heatmap(korelasi_prov, annot=True, fmt=".2f");
+    st.pyplot(fig)
+
+with cole22:
+    "### ⠀"
+    kor_sha = korelasi_prov['hasil.akhir_x']['skd.nilai']
+    kor_mha = korelasi_prov['hasil.akhir_x']['mtk.nilai']
+    f"- Korelasi antara variabel SKD dan Hasil Akhir di {pilihan_lokasi} bernilai {round(kor_sha,3)} yang berarti bahwa kedua variabel tersebut berkorelasi **{'rendah' if kor_sha < 0.3 else 'sedang' if kor_sha < 0.7 else 'tinggi' }**"
+    f"- Korelasi antara variabel Matematika dan Hasil Akhir di {pilihan_lokasi} bernilai {round(kor_mha,3)} yang berarti bahwa kedua variabel tersebut berkorelasi **{'rendah' if kor_mha < 0.3 else 'sedang' if kor_mha < 0.7 else 'tinggi' }**"
 
 "---"
 
