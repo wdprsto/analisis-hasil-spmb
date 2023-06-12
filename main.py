@@ -163,25 +163,39 @@ with cold10:
 
 with cold20:
     "### ⠀"
-    diterima_prov = df_eda_01[(df_eda_01["hasil.akhir_x"]==1)&(df_eda_01['lokasi.formasi']==pilihan_lokasi)].count(),
-    ditolak_prov = df_eda_01[(df_eda_01["hasil.akhir_x"]==0)&(df_eda_01['lokasi.formasi']==pilihan_lokasi)].count() ,
+    diterima_prov = df_eda_01[(df_eda_01["hasil.akhir_x"]==1)&(df_eda_01['lokasi.formasi']==pilihan_lokasi)].count()
+    ditolak_prov = df_eda_01[(df_eda_01["hasil.akhir_x"]==0)&(df_eda_01['lokasi.formasi']==pilihan_lokasi)].count() 
+    keketatan_prov = df_eda_01[(df_eda_01["hasil.akhir_x"]==1)&(df_eda_01['lokasi.formasi']==pilihan_lokasi)].count()/df_eda_01[(df_eda_01["hasil.akhir_x"]==0)&(df_eda_01['lokasi.formasi']==pilihan_lokasi)].count()*100
+
+    diterima_prov_lk = df_eda_01[(df_eda_01["hasil.akhir_x"]==1)&(df_eda_01['lokasi.formasi']==pilihan_lokasi)&(df_eda_01['jk']=="Lk")].count()
+    diterima_prov_pr = df_eda_01[(df_eda_01["hasil.akhir_x"]==1)&(df_eda_01['lokasi.formasi']==pilihan_lokasi)&(df_eda_01['jk']=="Pr")].count()
     
     cold100, cold101 = st.columns(2)
 
     with cold100:
         st.metric(label="Tidak Diterima",
-        value=f"{ditolak_prov[0][0]}"
+        value=f"{ditolak_prov[0]}"
+        )
+
+        st.metric(label="Keketatan Provinsi",
+        value=f"{numerize.numerize(keketatan_prov['hasil.akhir_x'])}%"
         )
 
     with cold101:
         st.metric(label="Diterima",
-        value=f"{diterima_prov[0][0]}"
+        value=f"{diterima_prov[0]}"
         )
 
-    keketatan_prov = df_eda_01[(df_eda_01["hasil.akhir_x"]==1)&(df_eda_01['lokasi.formasi']==pilihan_lokasi)].count()/df_eda_01[(df_eda_01["hasil.akhir_x"]==0)&(df_eda_01['lokasi.formasi']==pilihan_lokasi)].count()*100
-    st.metric(label="Keketatan Provinsi",
-        value=f"{numerize.numerize(keketatan_prov['hasil.akhir_x'])}%"
+        st.metric(label="Diterima Lk",
+        value=f"{diterima_prov_lk[0]}"
         )
+
+        st.metric(label="Diterima Pr",
+        value=f"{diterima_prov_pr[0]}"
+        )
+
+
+
         
 
 cole11, cole21 = st.columns(2)
