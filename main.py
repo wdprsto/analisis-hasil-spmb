@@ -39,8 +39,8 @@ pg_mtk = df_eda_01[df_eda_01['hasil.akhir_x']==1].groupby('lokasi.formasi').agg(
 # START HERE
 with st.sidebar:
     # Menambahkan logo perusahaan
-    st.image("https://streamlit.io/images/brand/streamlit-logo-primary-colormark-darktext.svg")
-
+    # st.image("https://stis.ac.id/media/source/up.png", width=150)
+    st.markdown('<img style="text-align:center;max-width:100%;padding-bottom:32px" src="https://stis.ac.id/media/source/up.png">', unsafe_allow_html=True)
     st.markdown('<div style="text-align:center">Wahyu Dwi Prasetio</div>', unsafe_allow_html=True)
     st.markdown('<div style="text-align:center">wdprsto@gmail.com</div>', unsafe_allow_html=True)
     
@@ -95,6 +95,7 @@ with colc1:
     fig = plt.figure(figsize=(6, 4))
     ax = sns.countplot(data=df_eda, y='nama.pendidikan')
     ax.set(xlabel='Jumlah Pendaftar', ylabel='Tingkat Pendidikan')
+
     st.pyplot(fig)
 
 with colc2:
@@ -102,3 +103,25 @@ with colc2:
     st.markdown('Dapatkan peserta berpegang kepada nilai SKD atau Matematika sebagai penentu kelulusan mereka?')
 
 "---"
+
+"## Infografis"
+
+
+"---"
+
+"## Analisis Korelasi"
+
+"---"
+
+"## Rekomendasi"
+"- Peserta seleksi penerimaan mahasiswa baru Polstat STIS hendaknya memaksimalkan nilai tes Matematika mereka di tahap 2 agar tingkat kelulusannya makin tinggi. Agar dapat lulus ke tahap 2, mereka setidaknya perlu memenuhi kriteria nilai lulus minimal SKD di masing-masing daerah."
+"- Setelah lolos ke tahap 2 dan mendapatkan nilai tes Matematika yang maksimal, peserta seleksi hanya perlu memastikan bahwa dirinya mampu memenuhi kriteria minimal untuk tes Psikologi dan tes Kesehatan & Kebugaran agar diterima di Polstat STIS."
+
+"---"
+
+"## Sumber Data"
+"Data diperoleh dari hasil resmi seleksi SPMB STIS yang tersedia di portal [SPMB STIS](https://spmb.stis.ac.id/site/pengumuman) tahun 2022 dan dapat diakses pada pranala berikut:"
+"*   [Tahap 1 - Pengumuman Hasil SKD](https://drive.google.com/file/d/16UszKsdZWdAwBU87AizDSxVZr1WmDIa3/view)"
+"*   [Tahap 2 - Pengumuman Hasil MTK](https://drive.google.com/file/d/17BJnUrBT1G8e47BUDjSF6XmW4b4Xoeh5/view)"
+"*   [Tahap 3 - Pengumuman Hasil TKK](https://drive.google.com/file/d/1z0XXPWVxszq4KWVnzv-LHItQBPZaauMj/view)"
+"*   [Tahap 4 - Kelulusan Cadangan](https://drive.google.com/file/d/1IHmZppCAR-lOD543KRJHAThJCiKdPBTy/view)"
