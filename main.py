@@ -118,7 +118,7 @@ with colc1:
 
 with colc2:
     st.markdown('<div style="font-size:40px;font-weight:bold;">Lantas?</div>', unsafe_allow_html=True)
-    st.markdown('Dapatkan peserta berpegang kepada nilai SKD atau Matematika sebagai penentu kelulusan mereka?')
+    st.markdown('Dapatkah peserta berpegang kepada nilai SKD atau Matematika sebagai penentu kelulusan mereka?')
 
 "---"
 
