@@ -66,7 +66,8 @@ with cola1:
 
     # st.altair_chart(sales_cat1, use_container_width=True)
     fig = plt.figure(figsize=(6, 4))
-    sns.countplot(data = df_eda, x = "hasil.akhir_x")
+    ax=sns.countplot(data = df_eda, x = "hasil.akhir_x")
+    ax.set(xlabel='Hasil Akhir', ylabel='Jumlah')
     st.pyplot(fig)
 
 with cola2:
@@ -92,7 +93,8 @@ colc1, colc2 = st.columns([4,1])
 
 with colc1:
     fig = plt.figure(figsize=(6, 4))
-    sns.countplot(data=df_eda, y='nama.pendidikan')
+    ax = sns.countplot(data=df_eda, y='nama.pendidikan')
+    ax.set(xlabel='Jumlah Pendaftar', ylabel='Tingkat Pendidikan')
     st.pyplot(fig)
 
 with colc2:
