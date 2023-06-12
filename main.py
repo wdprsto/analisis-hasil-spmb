@@ -84,7 +84,7 @@ with cola1:
 
     # st.altair_chart(sales_cat1, use_container_width=True)
     fig = plt.figure(figsize=(6, 4))
-    ax=sns.countplot(data = df_eda, x = "hasil.akhir_x")
+    ax=sns.countplot(data = df_eda_01, x = "hasil.akhir_x")
     ax.set(xlabel='Hasil Akhir', ylabel='Jumlah')
     st.pyplot(fig)
 
@@ -149,7 +149,23 @@ with cold22:
 
 f"## Analisis di {pilihan_lokasi}"
 
-"Plot korelasi terhadap variabel SKD, Matematika, dan Hasil Akhir menunjukkan bahwa SKD memiliki korelas yang lemah dengan hasil seleksi penerimaan. Di sisi lain, diketahui bahwa nilai Matematika memiliki korelasi yang sedang dengan hasil seleksi penerimaan."
+"Analisis terhadap data tahun 2022 dapat membantu peserta dalam menetapkan strategi untuk meraih nilai terbaik dalam tes SKD dan Matematika. Dengan mengejar target nilai yang sesuai, kemungkinan diterimanya peserta dalam SPMB STIS akan meningkat. Adapun komponen yang dapat dilihat meliputi distribusi nilai SKD dan MTK dari peserta yang lulus dari daerah yang sama di tahun 2022."
+
+cold10, cold20 = st.columns(2)
+
+with cold10:
+    "### Jumlah Peserta Lulus"
+    fig = plt.figure(figsize=(6, 5))
+    ax=sns.countplot(data = df_eda_01[df_eda_01['lokasi.formasi']==pilihan_lokasi], x = "hasil.akhir_x")
+    ax.set(xlabel='Hasil Akhir', ylabel='Jumlah')
+    st.pyplot(fig)
+
+with cold20:
+    "### ⠀"
+    keketatan_prov = df_eda_01[(df_eda_01["hasil.akhir_x"]==1)&(df_eda_01['lokasi.formasi']==pilihan_lokasi)].count()/df_eda_01[(df_eda_01["hasil.akhir_x"]==0)&(df_eda_01['lokasi.formasi']==pilihan_lokasi)].count()*100
+    st.metric(label="Keketatan Provinsi",
+        value=f"{numerize.numerize(keketatan_prov['hasil.akhir_x'])}%"
+        )
 
 cole11, cole21 = st.columns(2)
 
