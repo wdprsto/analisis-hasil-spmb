@@ -153,6 +153,11 @@ with cole2:
     ax = sns.heatmap(korelasi, annot=True, fmt=".2f");
     st.pyplot(fig)
 
+kor_sha = korelasi_prov['hasil.akhir_x']['skd.nilai']
+kor_mha = korelasi_prov['hasil.akhir_x']['mtk.nilai']
+f"- Korelasi antara variabel SKD dan Hasil Akhir di {pilihan_lokasi} bernilai {round(kor_sha,3)} yang berarti bahwa kedua variabel tersebut berkorelasi **{'rendah' if kor_sha < 0.3 else 'sedang' if kor_sha < 0.7 else 'tinggi' }**"
+f"- Korelasi antara variabel Matematika dan Hasil Akhir di {pilihan_lokasi} bernilai {round(kor_mha,3)} yang berarti bahwa kedua variabel tersebut berkorelasi **{'rendah' if kor_mha < 0.3 else 'sedang' if kor_mha < 0.7 else 'tinggi' }**"
+
 "---"
 
 "## Rekomendasi"
