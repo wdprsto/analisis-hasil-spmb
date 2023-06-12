@@ -160,7 +160,7 @@ with cold11:
         )
     
     "Latar Belakang Pendidikan Peserta yang Lulus"
-    st.dataframe(df_eda[df_eda['hasil.akhir_x']=='Lulus']['nama.pendidikan'].value_counts().reset_index().rename(columns={"index":"jenjang pendidikan", "nama.pendidikan":"jumlah lulus"}))
+    st.dataframe(df_eda[df_eda['hasil.akhir_x']=='Lulus']['nama.pendidikan'].value_counts().reset_index().rename(columns={"nama.pendidikan":"jenjang pendidikan"}))
 
 
 
