@@ -25,11 +25,24 @@ df_eda_01['t2.keterangan'].replace({"P/L":1, "P":0, "TL":0}, inplace=True)
 
 # metrics data
 keketatan = df_eda_01[df_eda_01["hasil.akhir_x"]==1].count()/df_eda_01[df_eda_01["hasil.akhir_x"]==0].count()*100
+pg_skd = df_eda_01[df_eda_01['hasil.akhir_x']==1].groupby('lokasi.formasi').agg(
+    nilai_min_skd = ('skd.nilai','min'),
+    nilai_max_skd = ('skd.nilai','max'),
+    nilai_rerata_skd = ('skd.nilai','mean')
+)
+pg_mtk = df_eda_01[df_eda_01['hasil.akhir_x']==1].groupby('lokasi.formasi').agg(
+    nilai_min_mtk = ('mtk.nilai','min'),
+    nilai_max_mtk = ('mtk.nilai','max'),
+    nilai_rerata_mtk = ('mtk.nilai','mean')
+)
 
 # START HERE
 with st.sidebar:
     # Menambahkan logo perusahaan
     st.image("https://streamlit.io/images/brand/streamlit-logo-primary-colormark-darktext.svg")
+
+    st.markdown('<div style="text-align:center">Wahyu Dwi Prasetio</div>', unsafe_allow_html=True)
+    st.markdown('<div style="text-align:center">wdprsto@gmail.com</div>', unsafe_allow_html=True)
     
 
 
@@ -44,10 +57,10 @@ with st.sidebar:
 "---"
 
 "## Fakta & Data"
-"- Jumlah peserta lolos seleksi sangat sedikit dibandingkan dengan jumlah pendaftar. Keketatan sekolah kedinasan ini"
+"- Kuota penerimaan yang sangat sedikit dibandingkan dengan jumlah pendaftar. Keketatan sekolah kedinasan ini mencapai 2.87%, atau 1 banding 34 orang."
 
-col1, col2 = st.columns(2)
-with col1:
+cola1, cola2 = st.columns(2)
+with cola1:
     # sales_cat1 = alt.Chart(df_eda).mark_bar().encode(alt.X('hasil.akhir_x', title="Status", axis=alt.Axis(labelAngle=0)), alt.Y('hasil.akhir_x', title="Pendaftar", aggregate="count")
     #                                                         )
 
@@ -56,12 +69,34 @@ with col1:
     sns.countplot(data = df_eda, x = "hasil.akhir_x")
     st.pyplot(fig)
 
-with col2:
-    # st.metric(label="Order",
-    #         value=mx_data['order_id'][3],
-    #         delta=((mx_data['order_id'][3]-mx_data['order_id'][2])/mx_data['order_id'][2])*100
-    #         )
+with cola2:
     st.metric(label="Keketatan",
             value=f"{numerize.numerize(keketatan['hasil.akhir_x'])}%"
             )
 
+"- Passing grade SKD dan Matematika yang tinggi agar dapat lolos ke tahap selanjutnya "
+
+colc1, colc2 = st.columns(2)
+
+with colc1:
+    st.dataframe(pg_skd)
+
+with colc2:
+    st.dataframe(pg_mtk)
+
+"- Adanya kuota formasi per Provinsi yang diatur oleh BPS"
+
+"---"
+
+colc1, colc2 = st.columns([4,1])
+
+with colc1:
+    fig = plt.figure(figsize=(6, 4))
+    sns.countplot(data=df_eda, y='nama.pendidikan')
+    st.pyplot(fig)
+
+with colc2:
+    st.markdown('<div style="font-size:40px;font-weight:bold;">Lantas?</div>', unsafe_allow_html=True)
+    st.markdown('Dapatkan peserta berpegang kepada nilai SKD atau Matematika sebagai penentu kelulusan mereka?')
+
+"---"
