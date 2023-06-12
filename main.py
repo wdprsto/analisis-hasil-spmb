@@ -160,12 +160,29 @@ with cold10:
     ax.set(xlabel='Hasil Akhir', ylabel='Jumlah')
     st.pyplot(fig)
 
+
 with cold20:
     "### ⠀"
+    diterima_prov = df_eda_01[(df_eda_01["hasil.akhir_x"]==1)&(df_eda_01['lokasi.formasi']==pilihan_lokasi)].count(),
+    ditolak_prov = df_eda_01[(df_eda_01["hasil.akhir_x"]==0)&(df_eda_01['lokasi.formasi']==pilihan_lokasi)].count() ,
+    
+    cold100, cold101 = st.columns(2)
+
+    with cold100:
+        st.metric(label="Tidak Diterima",
+        value=f"{ditolak_prov[0][0]}"
+        )
+
+    with cold101:
+        st.metric(label="Diterima",
+        value=f"{diterima_prov[0][0]}"
+        )
+
     keketatan_prov = df_eda_01[(df_eda_01["hasil.akhir_x"]==1)&(df_eda_01['lokasi.formasi']==pilihan_lokasi)].count()/df_eda_01[(df_eda_01["hasil.akhir_x"]==0)&(df_eda_01['lokasi.formasi']==pilihan_lokasi)].count()*100
     st.metric(label="Keketatan Provinsi",
         value=f"{numerize.numerize(keketatan_prov['hasil.akhir_x'])}%"
         )
+        
 
 cole11, cole21 = st.columns(2)
 
