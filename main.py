@@ -111,7 +111,7 @@ colc1, colc2 = st.columns([4,1])
 
 with colc1:
     fig = plt.figure(figsize=(6, 4))
-    ax = sns.countplot(data=df_eda, y='nama.pendidikan')
+    ax = sns.countplot(data=df_eda, y='nama.pendidikan', order=df_eda['nama.pendidikan'].value_counts().index)
     ax.set(xlabel='Jumlah Pendaftar', ylabel='Tingkat Pendidikan')
 
     st.pyplot(fig)
