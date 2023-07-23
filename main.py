@@ -7,10 +7,13 @@ from babel.numbers import format_currency
 import altair as alt
 from numerize import numerize
 
-st.set_page_config(page_title="Analisis SPMB STIS 2020 - Wahyu",
+st.set_page_config(page_title="Analisis SPMB STIS 2022 - Wahyu",
+                   page_icon="📈",
                    layout="wide")
-
 sns.set(style='dark')
+
+# fungsi styling
+
 # Helper function yang dibutuhkan untuk menyiapkan berbagai dataframe
 
 
@@ -40,27 +43,28 @@ num_col = ['skd.nilai', 'mtk.nilai', 'hasil.akhir_x']
 korelasi = df_eda_01[num_col].corr()
 
 # START HERE
-with st.sidebar:
-    # Menambahkan logo perusahaan
-    # st.image("https://stis.ac.id/media/source/up.png", width=150)
-    st.markdown('<img style="text-align:center;max-width:100%;padding-bottom:32px" src="https://stis.ac.id/media/source/up.png">', unsafe_allow_html=True)
-    st.markdown('<div style="text-align:center">Wahyu Dwi Prasetio</div>', unsafe_allow_html=True)
-    st.markdown('<div style="text-align:center;padding-bottom:32px">wdprsto@gmail.com</div>', unsafe_allow_html=True)
+st.sidebar.markdown('<div>'+
+                    '<img style="max-width:100px;padding:52px 0px 40px 0px;display: block;margin:0px auto" '+
+                    'src="https://stis.ac.id/media/source/up.png">'+
+                    '</div>', 
+                    unsafe_allow_html=True)
+# st.sidebar.markdown('<div style="text-align:left">Wahyu Dwi Prasetio</div>', unsafe_allow_html=True)
+# st.sidebar.markdown('<div style="text-align:left;padding-bottom:32px">wdprsto@gmail.com</div>', unsafe_allow_html=True)
 
-    pilihan_lokasi = st.selectbox(
-        "Pilih Lokasi Anda",
-        ['Aceh', 'Sumatera Utara', 'Sumatera Barat', 'Riau', 'Jambi',
-        'Sumatera Selatan', 'Bengkulu', 'Lampung',
-        'Kepulauan Bangka Belitung', 'Kepulauan Riau',
-        'Nusa Tenggara Timur', 'Nusa Tenggara Barat', 'Kalimantan Barat',
-        'Kalimantan Tengah', 'Kalimantan Selatan', 'Kalimantan Timur',
-        'Kalimantan Utara', 'Sulawesi Utara', 'Sulawesi Tengah',
-        'Sulawesi Selatan', 'Sulawesi Tenggara', 'Gorontalo',
-        'Sulawesi Barat', 'Maluku', 'Maluku Utara', 'Papua Barat', 'Papua',
-        'D I Yogyakarta', 'Banten', 'Bali', 'Papua Barat (Afirmasi)',
-        'Papua (Afirmasi)', 'Pusat', 'DKI Jakarta', 'Jawa Barat',
-        'Jawa Tengah', 'Jawa Timur']
-    )
+pilihan_lokasi = st.sidebar.selectbox(
+    "Pilih Lokasi Anda",
+    ['Aceh', 'Sumatera Utara', 'Sumatera Barat', 'Riau', 'Jambi',
+    'Sumatera Selatan', 'Bengkulu', 'Lampung',
+    'Kepulauan Bangka Belitung', 'Kepulauan Riau',
+    'Nusa Tenggara Timur', 'Nusa Tenggara Barat', 'Kalimantan Barat',
+    'Kalimantan Tengah', 'Kalimantan Selatan', 'Kalimantan Timur',
+    'Kalimantan Utara', 'Sulawesi Utara', 'Sulawesi Tengah',
+    'Sulawesi Selatan', 'Sulawesi Tenggara', 'Gorontalo',
+    'Sulawesi Barat', 'Maluku', 'Maluku Utara', 'Papua Barat', 'Papua',
+    'D I Yogyakarta', 'Banten', 'Bali', 'Papua Barat (Afirmasi)',
+    'Papua (Afirmasi)', 'Pusat', 'DKI Jakarta', 'Jawa Barat',
+    'Jawa Tengah', 'Jawa Timur']
+)
     
 
 
