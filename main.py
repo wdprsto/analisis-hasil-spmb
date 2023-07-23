@@ -3,19 +3,29 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 import streamlit as st
-from babel.numbers import format_currency
-import altair as alt
 from numerize import numerize
+from helper import set_bar_pcnt, rainbow_text
+from matplotlib import transforms
+import plotly.express as px
 
 st.set_page_config(page_title="Analisis SPMB STIS 2022 - Wahyu",
                    page_icon="📈",
                    layout="wide")
-sns.set(style='dark')
+# sns.set(style='dark')
 
 # fungsi styling
 
 # Helper function yang dibutuhkan untuk menyiapkan berbagai dataframe
-
+# define colors
+GRAY1, GRAY2, GRAY3 = '#231F20', '#414040', '#555655'
+GRAY4, GRAY5, GRAY6 = '#646369', '#76787B', '#828282'
+GRAY7, GRAY8, GRAY9 = '#929497', '#A6A6A5', '#BFBEBE'
+BLUE1, BLUE2, BLUE3, BLUE4 = '#174A7E', '#4A81BF', '#94B2D7', '#94AFC5'
+BLUE5, BLUE6 = '#92CDDD', '#2E869D'
+RED1, RED2, RED3 = '#C3514E', '#E6BAB7', '#DFDEDE'
+GREEN1, GREEN2 = '#0C8040', '#9ABB59'
+ORANGE1, ORANGE2, ORANGE3 = '#F79747', '#FAC090', '#F36721'
+TURQ1, TURQ2, TURQ3 = "#31859C", "#4bacc6", "#28728a"
 
 # Load cleaned data
 df_eda = pd.read_csv("df_keseluruhan.csv")
@@ -43,59 +53,69 @@ num_col = ['skd.nilai', 'mtk.nilai', 'hasil.akhir_x']
 korelasi = df_eda_01[num_col].corr()
 
 # START HERE
-st.sidebar.markdown('<div>'+
-                    '<img style="max-width:100px;padding:52px 0px 40px 0px;display: block;margin:0px auto" '+
-                    'src="https://stis.ac.id/media/source/up.png">'+
-                    '</div>', 
-                    unsafe_allow_html=True)
-# st.sidebar.markdown('<div style="text-align:left">Wahyu Dwi Prasetio</div>', unsafe_allow_html=True)
-# st.sidebar.markdown('<div style="text-align:left;padding-bottom:32px">wdprsto@gmail.com</div>', unsafe_allow_html=True)
-
-pilihan_lokasi = st.sidebar.selectbox(
-    "Pilih Lokasi Anda",
-    ['Aceh', 'Sumatera Utara', 'Sumatera Barat', 'Riau', 'Jambi',
-    'Sumatera Selatan', 'Bengkulu', 'Lampung',
-    'Kepulauan Bangka Belitung', 'Kepulauan Riau',
-    'Nusa Tenggara Timur', 'Nusa Tenggara Barat', 'Kalimantan Barat',
-    'Kalimantan Tengah', 'Kalimantan Selatan', 'Kalimantan Timur',
-    'Kalimantan Utara', 'Sulawesi Utara', 'Sulawesi Tengah',
-    'Sulawesi Selatan', 'Sulawesi Tenggara', 'Gorontalo',
-    'Sulawesi Barat', 'Maluku', 'Maluku Utara', 'Papua Barat', 'Papua',
-    'D I Yogyakarta', 'Banten', 'Bali', 'Papua Barat (Afirmasi)',
-    'Papua (Afirmasi)', 'Pusat', 'DKI Jakarta', 'Jawa Barat',
-    'Jawa Tengah', 'Jawa Timur']
-)
-    
-
-
 "# Analisis Hasil Seleksi Penerimaan Mahasiswa Baru Politeknik Statistika STIS Tahun 2022"
-"oleh Wahyu Dwi Prasetio"
-"---"
-
-"Perguruan tinggi kedinasan (PTK) merupakan salah satu tujuan siswa SMA dalam melanjutkan pendidikannya. Pemilihan perguruan tinggi kedinasan sebagai pendidikan lanjutan didasari pada keuntungan yang diberikan oleh instansi tersebut, mulai dari biaya pendidikan yang gratis sampai jaminan menjadi Aparatur Sipil Negara (ASN) ketika lulus nanti. Salah satu perguruan tinggi kedinasan yang menawarkan keuntungan tersebut adalah Politeknik Statistika STIS."
-
-"Politeknik Statistika STIS merupakan perguruan tinggi kedinasan di bawah Badan Pusat Statistik (BPS). Berdasarkan rilis Badan Kepegawaian Negara (BKN), jumlah pendaftar di Polstat STIS pada tahun 2023 menduduki urutan ke-3 sebanyak 18.261 orang. Angka ini juga diikuti dengan masifnya jumlah pendaftar di tahun 2023. BKN dalam unggahannya di bulan April menunjukkan jumlah pendaftar di Polstat STIS menduduki peringkat kedua dengan total 12441 pendaftar. Dengan total penerimaan hanya 500 peserta (keketatan 4.167%), peserta seleksi penerimaan mahasiswa baru haru menganalisis kondisi dan berstrategi agar peluang ia diterima lebih besar."
-
+"Politeknik Statistika STIS sebagai perguruan tinggi kedinasan di bawah Badan Pusat Statistik (BPS) menduduki urutan ke-3 jumlah pendaftar terbanyak dengan total 18.261 orang. Dengan total penerimaan hanya 500 orang (keketatan 4.167%), peserta seleksi harus menganalisis kondisi dan merancang strategi agar peluang diterima jauh lebih besar."
 "---"
 
 "## Fakta & Data"
-"- Kuota penerimaan yang sangat sedikit dibandingkan dengan jumlah pendaftar. Keketatan sekolah kedinasan ini mencapai 2.87%, atau 1 banding 34 orang."
+"- Kuota penerimaan yang sangat sedikit. Keketatan mencapai 1 banding 34 orang."
 
 cola1, cola2 = st.columns(2)
 with cola1:
-    # sales_cat1 = alt.Chart(df_eda).mark_bar().encode(alt.X('hasil.akhir_x', title="Status", axis=alt.Axis(labelAngle=0)), alt.Y('hasil.akhir_x', title="Pendaftar", aggregate="count")
-    #                                                         )
+    label = df_eda_01['hasil.akhir_x'].value_counts()
 
-    # st.altair_chart(sales_cat1, use_container_width=True)
-    fig = plt.figure(figsize=(6, 4))
-    ax=sns.countplot(data = df_eda_01, x = "hasil.akhir_x")
-    ax.set(xlabel='Hasil Akhir', ylabel='Jumlah')
-    st.pyplot(fig)
+    fig, ax1 = plt.subplots(figsize=(7.45, 3.5), dpi=110)
+    fig.subplots_adjust(left=0.154, right=0.77, top=0.89, bottom=0.1)
+    bars = plt.bar([0, 1], [label[0], label[1]],
+                color=[BLUE5, BLUE1],
+                linewidth=0.5,
+                width=0.55)
+    ax1.tick_params(bottom=False, left=False, labelleft=False, labelbottom='on')
+
+    ax1.spines['left'].set_visible(False)
+    ax1.spines['right'].set_visible(False)
+    ax1.spines['top'].set_visible(False)
+    plt.xticks([0, 1], ['Tidak Lolos', 'Lolos'])
+    ax1.spines['bottom'].set_color(GRAY9)
+    for item in ax1.get_xticklabels():
+        item.set_fontsize(12)
+        item.set_color(GRAY4)
+
+    for i, bar in enumerate(bars):
+        plt.text(bar.get_x() + 0.2,
+                bar.get_height() + (-1500, 500)[i==1],
+                label[i],
+                fontsize=12,
+                color=('white','black')[i==1])
+
+    # title the plot
+    fig.text(0.18, 0.9, 'Hasil Seleksi Penerimaan', color=GRAY3,
+            fontsize=12)
+    # ax1.text(-0.35, 46, 'Tarif pajak maksimum', fontsize=14, color=GRAY7)
+    # ax1.axvline(0.31, ymin=0.05, ymax=0.8, color=BLUE1, linewidth=1.2)
+    # ax1.axvline(1.3, ymin=0.05, ymax=0.89, color=BLUE1, linewidth=1.2)
+    st.pyplot(fig,
+                use_container_width=True)
 
 with cola2:
-    st.metric(label="Keketatan",
-            value=f"{numerize.numerize(keketatan['hasil.akhir_x'])}%"
-            )
+    fig2, ax2 = plt.subplots(figsize=(7.45, 4.9), # width, height in inches
+                            dpi=110)
+    ax2.text(0, 1,
+            f"{numerize.numerize(keketatan['hasil.akhir_x'])}%",
+            verticalalignment='top', horizontalalignment='left',
+            color=TURQ3, fontsize=42, fontweight = 'bold')
+    
+    rainbow_text(
+    0, 0.78,
+    'Keketatan||        Seleksi Penerimaan STIS',
+    colors=[
+        [TURQ3, GRAY1]], 
+        ax=ax2,
+    fontsize=14, spacing=140)
+
+    ax2.axis('off');
+    st.pyplot(fig2,
+                use_container_width=True)
 
 "- Passing grade SKD dan Matematika yang tinggi agar dapat lolos ke tahap selanjutnya "
 
@@ -199,6 +219,25 @@ with cold22:
 
 "---"
 
+w11, w12 = st.columns([1,2])
+with w11:
+    "Pilih lokasi anda"
+with w12:
+    pilihan_lokasi = st.selectbox(
+        "Provinsi",
+        ['Aceh', 'Sumatera Utara', 'Sumatera Barat', 'Riau', 'Jambi',
+        'Sumatera Selatan', 'Bengkulu', 'Lampung',
+        'Kepulauan Bangka Belitung', 'Kepulauan Riau',
+        'Nusa Tenggara Timur', 'Nusa Tenggara Barat', 'Kalimantan Barat',
+        'Kalimantan Tengah', 'Kalimantan Selatan', 'Kalimantan Timur',
+        'Kalimantan Utara', 'Sulawesi Utara', 'Sulawesi Tengah',
+        'Sulawesi Selatan', 'Sulawesi Tenggara', 'Gorontalo',
+        'Sulawesi Barat', 'Maluku', 'Maluku Utara', 'Papua Barat', 'Papua',
+        'D I Yogyakarta', 'Banten', 'Bali', 'Papua Barat (Afirmasi)',
+        'Papua (Afirmasi)', 'Pusat', 'DKI Jakarta', 'Jawa Barat',
+        'Jawa Tengah', 'Jawa Timur']
+)
+    
 f"## Analisis di {pilihan_lokasi}"
 
 "Analisis terhadap data tahun 2022 dapat membantu peserta dalam menetapkan strategi untuk meraih nilai terbaik dalam tes SKD dan Matematika. Dengan mengejar target nilai yang sesuai, kemungkinan diterimanya peserta dalam SPMB STIS akan meningkat. Adapun komponen yang dapat dilihat meliputi distribusi nilai SKD dan MTK dari peserta yang lulus dari daerah yang sama di tahun 2022."
