@@ -19,7 +19,7 @@ df_eda = pd.read_csv("df_keseluruhan.csv")
 
 # Filter data
 df_eda_01 = df_eda.copy()
-df_eda_01['hasil.akhir_x'].replace({"Tidak Lulus":0, "Lulus":1, np.NaN:0}, inplace=True)
+df_eda_01['hasil.akhir_x'].replace({"Tidak Lulus":0, "Lulus":1, np.nan:0}, inplace=True)
 df_eda_01['skd.keterangan'].replace({"P/L":1, "P":0, "TL":0, "TH":0, "PA/L":0}, inplace=True)
 df_eda_01['t2.keterangan'].replace({"P/L":1, "P":0, "TL":0}, inplace=True)
 
